@@ -1,0 +1,45 @@
+(() => {
+    const users = [
+        {
+            user_id: '6684de56b6012f72ce9b6233',
+            user_name: 'Rivera Richardson',
+            user_email: 'riverarichardson@enaut.com',
+            user_address: '788 High Street, Kanauga, Puerto Rico, 7577',
+        },
+        {
+            user_id: '6684de56f732f72dabbb58ba',
+            user_name: 'Savannah Knight',
+            user_email: 'savannahknight@enaut.com',
+            user_address: '938 Aberdeen Street, Graball, Montana, 6347',
+        }
+    ];
+
+    const sendUser = async (user) => {
+        try {
+            const response = await fetch('http://localhost:3001/api/dynamic/users?app_uid=d3604302-fcf4-4c3a-9d0a-bf0e9efbe930', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer YOUR_BEARER_TOKEN' // Add your Bearer token here
+                },
+                body: JSON.stringify(user),
+            });
+
+            const data = await response.json();
+            console.log('User sent:', data);
+        } catch (error) {
+            console.log('error', error);
+        }
+    };
+
+    let userIndex = 0;
+    const intervalId = setInterval(() => {
+        if (userIndex >= users.length) {
+            clearInterval(intervalId); // Stop the interval when all users are processed
+            return;
+        }
+        sendUser(users[userIndex]);
+        userIndex++;
+    }, 30000); // 30 seconds interval
+
+})();
